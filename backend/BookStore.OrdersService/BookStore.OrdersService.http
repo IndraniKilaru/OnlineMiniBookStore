@@ -1,0 +1,86 @@
+@BookStore.OrdersService_HostAddress = http://localhost:5004
+
+# Health Check
+GET {{BookStore.OrdersService_HostAddress}}/health
+Accept: application/json
+
+###
+
+# Get All Orders
+GET {{BookStore.OrdersService_HostAddress}}/api/orders
+Accept: application/json
+
+###
+
+# Get Order by ID
+GET {{BookStore.OrdersService_HostAddress}}/api/orders/1
+Accept: application/json
+
+###
+
+# Get User Orders
+GET {{BookStore.OrdersService_HostAddress}}/api/orders/user/1
+Accept: application/json
+
+###
+
+# Create New Order
+POST {{BookStore.OrdersService_HostAddress}}/api/orders/1
+Content-Type: application/json
+
+{
+    "items": [
+        {
+            "bookId": 1,
+            "quantity": 2,
+            "price": 29.99
+        },
+        {
+            "bookId": 2,
+            "quantity": 1,
+            "price": 19.99
+        }
+    ],
+    "shippingAddress": {
+        "street": "123 Main St",
+        "city": "Anytown",
+        "state": "ST",
+        "zipCode": "12345",
+        "country": "USA"
+    },
+    "paymentMethod": "Credit Card"
+}
+
+###
+
+# Update Order Status (Admin only)
+PUT {{BookStore.OrdersService_HostAddress}}/api/orders/1/status
+Content-Type: application/json
+
+{
+    "status": "Shipped"
+}
+
+###
+
+# Get Orders by Status
+GET {{BookStore.OrdersService_HostAddress}}/api/orders?status=Pending
+Accept: application/json
+
+###
+
+# Get Orders by Date Range
+GET {{BookStore.OrdersService_HostAddress}}/api/orders?startDate=2025-01-01&endDate=2025-12-31
+Accept: application/json
+
+###
+
+# Cancel Order
+PUT {{BookStore.OrdersService_HostAddress}}/api/orders/1/status
+Content-Type: application/json
+
+{
+    "status": "Cancelled"
+}
+
+###

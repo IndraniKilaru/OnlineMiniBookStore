@@ -1,0 +1,73 @@
+@BookStore.BooksService_HostAddress = http://localhost:5002
+
+# Health Check
+GET {{BookStore.BooksService_HostAddress}}/health
+Accept: application/json
+
+###
+
+# Get All Books
+GET {{BookStore.BooksService_HostAddress}}/api/books
+Accept: application/json
+
+###
+
+# Get Book by ID
+GET {{BookStore.BooksService_HostAddress}}/api/books/1
+Accept: application/json
+
+###
+
+# Search Books by Title
+GET {{BookStore.BooksService_HostAddress}}/api/books/search?query=Programming
+Accept: application/json
+
+###
+
+# Get Books by Category
+GET {{BookStore.BooksService_HostAddress}}/api/books/category/Technology
+Accept: application/json
+
+###
+
+# Create New Book (Admin only - requires JWT token)
+POST {{BookStore.BooksService_HostAddress}}/api/books
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+    "title": "New Programming Book",
+    "author": "John Doe",
+    "isbn": "978-1234567890",
+    "price": 29.99,
+    "category": "Technology",
+    "description": "A comprehensive guide to programming",
+    "stockQuantity": 100,
+    "imageUrl": "https://example.com/book.jpg"
+}
+
+###
+
+# Update Book (Admin only - requires JWT token)
+PUT {{BookStore.BooksService_HostAddress}}/api/books/1
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+    "title": "Updated Programming Book",
+    "author": "John Doe",
+    "isbn": "978-1234567890",
+    "price": 34.99,
+    "category": "Technology",
+    "description": "An updated comprehensive guide to programming",
+    "stockQuantity": 95,
+    "imageUrl": "https://example.com/updated-book.jpg"
+}
+
+###
+
+# Delete Book (Admin only - requires JWT token)
+DELETE {{BookStore.BooksService_HostAddress}}/api/books/1
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+###

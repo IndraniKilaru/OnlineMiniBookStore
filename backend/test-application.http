@@ -1,0 +1,77 @@
+### Test User Registration and RabbitMQ Message Flow
+POST http://localhost:5129/api/auth/register
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "password": "TestPassword123!"
+}
+
+### Test User Login
+POST http://localhost:5129/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "password": "TestPassword123!"
+}
+
+### Test Admin Registration
+POST http://localhost:5129/api/auth/register-admin
+Content-Type: application/json
+
+{
+  "firstName": "Admin",
+  "lastName": "User",
+  "email": "admin@bookstore.com",
+  "password": "AdminPassword123!"
+}
+
+### Test Get Books (Public endpoint)
+GET http://localhost:5129/api/books
+
+### Test Create Book (Admin only)
+POST http://localhost:5129/api/books
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "title": "Test Book",
+  "author": "Test Author",
+  "isbn": "978-0123456789",
+  "price": 19.99,
+  "description": "A test book for our application",
+  "category": "Programming",
+  "stockQuantity": 10,
+  "imageUrl": "https://via.placeholder.com/300x400?text=Test+Book"
+}
+
+### Test Get Cart
+GET http://localhost:5129/api/cart
+Authorization: Bearer {{authToken}}
+
+### Test Add to Cart
+POST http://localhost:5129/api/cart/add
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "bookId": 1,
+  "quantity": 2
+}
+
+### Test Create Order (This should trigger RabbitMQ message)
+POST http://localhost:5129/api/orders
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "items": [
+    {
+      "bookId": 1,
+      "quantity": 1
+    }
+  ]
+}

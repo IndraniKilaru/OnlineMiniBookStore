@@ -1,0 +1,5 @@
+<!-- This would be a real image file in production, but for demo purposes, we'll use SVG -->
+<svg width="80" height="100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="80" height="100" fill="#e0e0e0" stroke="#ccc" stroke-width="1"/>
+  <text x="40" y="50" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">Book</text>
+</svg>

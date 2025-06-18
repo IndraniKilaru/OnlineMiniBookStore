@@ -1,0 +1,70 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Documentation
+*.md
+docs/
+README.md
+SETUP.md
+
+# Docker files
+docker-compose.yml
+docker-compose.*.yml
+Dockerfile
+.dockerignore
+
+# Scripts
+*.ps1
+*.sh
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Build outputs
+dist/
+build/
+out/
+
+# Dependencies (will be copied separately in respective Dockerfiles)
+node_modules/
+bin/
+obj/
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.development
+
+# Testing
+coverage/
+.nyc_output/
+test-results/
+TestResults/
+
+# Package manager files
+package-lock.json
+yarn.lock

@@ -1,0 +1,51 @@
+@BookStore.AuthService_HostAddress = http://localhost:5001
+
+# Health Check
+GET {{BookStore.AuthService_HostAddress}}/health
+Accept: application/json
+
+###
+
+# Register User
+POST {{BookStore.AuthService_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+    "email": "test@example.com",
+    "password": "TestPassword123!",
+    "firstName": "Test",
+    "lastName": "User"
+}
+
+###
+
+# Login User
+POST {{BookStore.AuthService_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "test@example.com",
+    "password": "TestPassword123!"
+}
+
+###
+
+# Get User Profile (requires JWT token)
+GET {{BookStore.AuthService_HostAddress}}/api/auth/profile
+Accept: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+###
+
+# Update User Profile (requires JWT token)
+PUT {{BookStore.AuthService_HostAddress}}/api/auth/profile
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+    "firstName": "Updated",
+    "lastName": "Name",
+    "email": "updated@example.com"
+}
+
+###

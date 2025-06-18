@@ -1,0 +1,193 @@
+services:
+  # SQL Server Database
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: bookstore-sqlserver
+    environment:
+      SA_PASSWORD: "YourStrong@Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - bookstore-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: bookstore-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - bookstore-network
+
+  # RabbitMQ Message Broker
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: bookstore-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: bookstore
+      RABBITMQ_DEFAULT_PASS: bookstore123
+    ports:
+      - "5672:5672"    # AMQP port
+      - "15672:15672"  # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    networks:
+      - bookstore-network
+
+  # Authentication Service
+  auth-service:
+    build:
+      context: ./backend
+      dockerfile: BookStore.AuthService/Dockerfile
+    container_name: bookstore-auth-service
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=BookStoreAuth;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=true"
+      RabbitMQ__Host: "rabbitmq"
+      RabbitMQ__Port: "5672"
+      RabbitMQ__Username: "bookstore"
+      RabbitMQ__Password: "bookstore123"
+    ports:
+      - "5001:8080"
+    depends_on:
+      - sqlserver
+      - rabbitmq
+    networks:
+      - bookstore-network
+  # Books Service
+  books-service:
+    build:
+      context: ./backend
+      dockerfile: BookStore.BooksService/Dockerfile
+    container_name: bookstore-books-service
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=BookStoreBooks;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=true"
+      ConnectionStrings__Redis: "redis:6379"
+      RabbitMQ__Host: "rabbitmq"
+      RabbitMQ__Port: "5672"
+      RabbitMQ__Username: "bookstore"
+      RabbitMQ__Password: "bookstore123"
+    ports:
+      - "5002:8080"
+    depends_on:
+      - sqlserver
+      - rabbitmq
+      - redis
+    networks:
+      - bookstore-network
+
+  # Cart Service
+  cart-service:
+    build:
+      context: ./backend
+      dockerfile: BookStore.CartService/Dockerfile
+    container_name: bookstore-cart-service
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=BookStoreCart;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=true"
+      Redis__ConnectionString: "redis:6379"
+    ports:
+      - "5003:8080"
+    depends_on:
+      - sqlserver
+      - redis
+    networks:
+      - bookstore-network
+  # Orders Service
+  orders-service:
+    build:
+      context: ./backend
+      dockerfile: BookStore.OrdersService/Dockerfile
+    container_name: bookstore-orders-service
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=BookStoreOrders;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=true"
+      RabbitMQ__Host: "rabbitmq"
+      RabbitMQ__Port: "5672"
+      RabbitMQ__Username: "bookstore"
+      RabbitMQ__Password: "bookstore123"
+    ports:
+      - "5004:8080"
+    depends_on:
+      sqlserver:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - bookstore-network
+
+  # Notification Service
+  notification-service:
+    build:
+      context: ./backend
+      dockerfile: BookStore.NotificationService/Dockerfile
+    container_name: bookstore-notification-service
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__RabbitMQ__Host: "rabbitmq"
+      ConnectionStrings__RabbitMQ__Port: "5672"
+      ConnectionStrings__RabbitMQ__Username: "bookstore"
+      ConnectionStrings__RabbitMQ__Password: "bookstore123"
+    ports:
+      - "5005:8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - bookstore-network
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./backend
+      dockerfile: BookStore.ApiGateway/Dockerfile
+    container_name: bookstore-api-gateway
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    ports:
+      - "5000:8080"
+    depends_on:
+      - auth-service
+      - books-service
+      - cart-service
+      - orders-service
+      - notification-service
+    networks:
+      - bookstore-network
+
+  # Angular Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: bookstore-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - api-gateway
+    networks:
+      - bookstore-network
+
+volumes:
+  sqlserver_data:
+    driver: local
+  redis_data:
+    driver: local
+  rabbitmq_data:
+    driver: local
+
+networks:
+  bookstore-network:
+    driver: bridge

@@ -1,0 +1,11 @@
+<svg width="120" height="160" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="120" height="160" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+<rect x="20" y="30" width="80" height="3" fill="#ddd"/>
+<rect x="20" y="40" width="60" height="3" fill="#ddd"/>
+<rect x="20" y="50" width="70" height="3" fill="#ddd"/>
+<rect x="20" y="120" width="80" height="3" fill="#ddd"/>
+<rect x="20" y="130" width="50" height="3" fill="#ddd"/>
+<path d="M40 70 L60 85 L80 70 L80 110 L40 110 Z" fill="#e0e0e0"/>
+<circle cx="50" cy="80" r="3" fill="#ccc"/>
+<text x="60" y="145" font-family="Arial, sans-serif" font-size="8" fill="#999" text-anchor="middle">Book Cover</text>
+</svg>

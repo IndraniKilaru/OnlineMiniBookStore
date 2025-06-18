@@ -1,0 +1,72 @@
+@BookStore.ApiGateway_HostAddress = http://localhost:5129
+
+# Health Check
+GET {{BookStore.ApiGateway_HostAddress}}/health
+Accept: application/json
+
+###
+
+# Get All Books (via API Gateway)
+GET {{BookStore.ApiGateway_HostAddress}}/api/books
+Accept: application/json
+
+###
+
+# Get Book by ID (via API Gateway)
+GET {{BookStore.ApiGateway_HostAddress}}/api/books/1
+Accept: application/json
+
+###
+
+# Get User Cart (via API Gateway)
+GET {{BookStore.ApiGateway_HostAddress}}/api/cart/1
+Accept: application/json
+
+###
+
+# Add Item to Cart (via API Gateway)
+POST {{BookStore.ApiGateway_HostAddress}}/api/cart/1/items
+Content-Type: application/json
+
+{
+    "bookId": 1,
+    "quantity": 2
+}
+
+###
+
+# Get User Orders (via API Gateway)
+GET {{BookStore.ApiGateway_HostAddress}}/api/orders/user/1
+Accept: application/json
+
+###
+
+# Get All Orders (via API Gateway)
+GET {{BookStore.ApiGateway_HostAddress}}/api/orders
+Accept: application/json
+
+###
+
+# Register User (via API Gateway)
+POST {{BookStore.ApiGateway_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+    "email": "test@example.com",
+    "password": "TestPassword123!",
+    "firstName": "Test",
+    "lastName": "User"
+}
+
+###
+
+# Login User (via API Gateway)
+POST {{BookStore.ApiGateway_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "test@example.com",
+    "password": "TestPassword123!"
+}
+
+###

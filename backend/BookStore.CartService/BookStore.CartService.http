@@ -1,0 +1,69 @@
+@BookStore.CartService_HostAddress = http://localhost:5003
+
+# Health Check
+GET {{BookStore.CartService_HostAddress}}/health
+Accept: application/json
+
+###
+
+# Get User Cart
+GET {{BookStore.CartService_HostAddress}}/api/cart/1
+Accept: application/json
+
+###
+
+# Add Item to Cart
+POST {{BookStore.CartService_HostAddress}}/api/cart/1/items
+Content-Type: application/json
+
+{
+    "bookId": 1,
+    "quantity": 2
+}
+
+###
+
+# Update Cart Item Quantity
+PUT {{BookStore.CartService_HostAddress}}/api/cart/1/items/1
+Content-Type: application/json
+
+{
+    "quantity": 3
+}
+
+###
+
+# Remove Item from Cart
+DELETE {{BookStore.CartService_HostAddress}}/api/cart/1/items/1
+
+###
+
+# Clear Cart
+DELETE {{BookStore.CartService_HostAddress}}/api/cart/1
+
+###
+
+# Get Cart Total
+GET {{BookStore.CartService_HostAddress}}/api/cart/1/total
+Accept: application/json
+
+###
+
+# Add Multiple Items to Cart
+POST {{BookStore.CartService_HostAddress}}/api/cart/1/items/bulk
+Content-Type: application/json
+
+{
+    "items": [
+        {
+            "bookId": 1,
+            "quantity": 2
+        },
+        {
+            "bookId": 2,
+            "quantity": 1
+        }
+    ]
+}
+
+###

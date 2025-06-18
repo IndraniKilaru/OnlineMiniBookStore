@@ -1,0 +1,86 @@
+# Build outputs
+bin/
+obj/
+out/
+dist/
+build/
+
+# Visual Studio / VS Code
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Dependencies
+packages/
+node_modules/
+
+# Test results
+TestResults/
+coverage/
+*.trx
+*.coverage
+*.coveragexml
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Documentation
+*.md
+docs/
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.development
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# Entity Framework
+Migrations/
+
+# Application specific
+appsettings.Development.json
+appsettings.Local.json
+launchSettings.json
+
+# Test files
+test-application.http
+*.http
+
+# Swagger/OpenAPI
+swagger.json
+swagger.yaml
